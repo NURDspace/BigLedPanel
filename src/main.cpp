@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/setbaud.h>
+#include "font.h"
 
 /*
  Init global vals
@@ -13,17 +14,14 @@
 unsigned char rxstate;
 
 unsigned char framebuffer[90]={
-0x00, 0xA0, 0xE0, 0xE0, 0xE0, 0xA0, 0x00, //N
-0x00, 0x00, 0xE0, 0xE0, 0x80, 0xE0, 0x00, //e
-0x00, 0x00, 0xE0, 0x80, 0x80, 0x80, 0x00, //r
-
-0x00, 0xC0, 0xA0, 0xA0, 0xA0, 0xC0, 0x00, //d
-0x00, 0x60, 0x80, 0xE0, 0x20, 0xE0, 0x00, //S
-0x00, 0x00, 0xE0, 0xA0, 0xE0, 0x80, 0x80, //p
-
-0x00, 0x00, 0x60, 0x20, 0xE0, 0xE0, 0x00, //a
-0x00, 0x00, 0x60, 0x80, 0x80, 0xE0, 0x00, //c
-0x00, 0x00, 0xE0, 0xE0, 0x80, 0xE0, 0x00, //e
+font[46][0],font[46][1],font[46][2],font[46][3],font[46][4],
+font[85][0],font[85][1],font[85][2],font[85][3],font[85][4],
+font[82][0],font[82][1],font[82][2],font[82][3],font[82][4],
+font[68][0],font[68][1],font[68][2],font[68][3],font[68][4],
+font[51][0],font[51][1],font[51][2],font[51][3],font[51][4],
+font[80][0],font[80][1],font[80][2],font[80][3],font[80][4],
+font[65][0],font[65][1],font[65][2],font[65][3],font[65][4],
+font[69][0],font[69][1],font[69][2],font[69][3],font[69][4],
 };
 
 
@@ -64,7 +62,7 @@ void setupSerial() {
 #endif
 
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data */ 
-    UCSR0B |= (1<<RXEN0) | (1<<RXCIE0) /* Enable RX and RX interrupt */
+    UCSR0B |= (1<<RXEN0) | (1<<RXCIE0); /* Enable RX and RX interrupt */
     sei();
 }
 
