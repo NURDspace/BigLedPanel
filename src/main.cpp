@@ -31,149 +31,148 @@ PORT_C
 #define SIZE 3
 
 void setup() {
- //Set registers
- DDRB = DDRB | B111111;
- DDRC = B000111;
- DDRD = DDRD | B11111110;
+    //Set registers
+    DDRB = DDRB | B111111;
+    DDRC = B000111;
+    DDRD = DDRD | B11111110;
 
- PORTB = B000011;
+    PORTB = B000011;
  
- clean();
- toggleE1();
+    clean();
+    toggleE1();
 }
 
 unsigned char rotate(char input)
 {
-        char output =0;
-        char cursor =0;
-        char sketch =0;
+    char output =0;
+    char cursor =0;
+    char sketch =0;
  
-        int  i = 0;
+    int  i = 0;
  
-        for(i;i<=SIZE;i++)
-        {
-                cursor = (input >> i) & 1;
-                sketch = cursor << SIZE - 1 - i;
-                output = output | sketch;
-                //output = output | sketch;
-        }
- 
-        return output;
+    for(i;i<=SIZE;i++)
+    {
+        cursor = (input >> i) & 1;
+        sketch = cursor << SIZE - 1 - i;
+        output = output | sketch;
+        //output = output | sketch;
+    }
+    return output;
 }
 
 void setPixels(int RowData, int ColData, int ledBlock){
-  /*
-    Colom thing
-  */
-  for (int col = 0; col < 16; col++) {
-    if (ColData == col){
-      continue;
+    /*
+        Colom thing
+    */
+    for (int col = 0; col < 16; col++) {
+        if (ColData == col){
+            continue;
+        }
+        
+        //Clock Col data 
+        if (col < 8) {
+            //Clock data
+            PORTD = rotate(col)+8 << 4;
+            //Shift col 1-8
+            PORTC = 6;
+        }else{
+            //Clock data
+            PORTD = rotate(col-8)+8 << 4;
+            //Shift col 9-15
+            PORTC = 7;
+        }
+        toggleE1();
     }
     
-    //Clock Col data 
-    if (col < 8) {
-      //Clock data
-      PORTD = rotate(col)+8 << 4;
-      //Shift col 1-8
-      PORTC = 6;
-    }else{
-      //Clock data
-      PORTD = rotate(col-8)+8 << 4;
-      //Shift col 9-15
-      PORTC = 7;
-    }
+    /*
+        Row stuff
+    */
+    //Write row data to data registers
+    PORTD = (RowData << 1);
+            
+    //chip select
+    PORTC = ledBlock;
     toggleE1();
-  }
-  
-  /*
-    Row stuff
-  */
-  //Write row data to data registers
-  PORTD = (RowData << 1);
-      
-  //chip select
-  PORTC = ledBlock;
-  toggleE1();
 }
 void toggleE1() {
-  PORTB = B000001;
-  PORTB = B000011;
+    PORTB = B000001;
+    PORTB = B000011;
 }
 void clean() {
-  //Toggle MR (PB0)
-  for (int nopje = 0; nopje < 900; nopje++){
-    asm("nop");
-  }
-  PORTB = B000010;
-  PORTB = B000011;
+    //Toggle MR (PB0)
+    for (int nopje = 0; nopje < 900; nopje++){
+        asm("nop");
+    }
+    PORTB = B000010;
+    PORTB = B000011;
 }
 
 void loop() {
-  setPixels(127,0,0);
-  clean();
-  setPixels(8,1,0);
-  clean();
-  setPixels(8,2,0);
-  clean();
-  setPixels(8,3,0);
-  clean();
-  setPixels(127,4,0);
-  clean();
-  
-  setPixels(127,5,0);
-  clean();
-  setPixels(72,6,0);
-  clean();
-  setPixels(72,7,0);
-  clean();
-  setPixels(72,8,0);
-  clean();
-  setPixels(127,9,0);
-  clean();
-  
-  setPixels(127,10,0);
-  clean();
-  setPixels(1,11,0);
-  clean();
-  setPixels(1,12,0);
-  clean();
-  setPixels(1,13,0);
-  clean();
-  setPixels(1,14,0);
-  clean();
-  
-  setPixels(127,0,1);
-  clean();
-  setPixels(1,1,1);
-  clean();
-  setPixels(1,2,1);
-  clean();
-  setPixels(1,3,1);
-  clean();
-  setPixels(1,4,1);
-  clean();
-  
-  setPixels(127,5,1);
-  clean();
-  setPixels(72,6,1);
-  clean();
-  setPixels(72,7,1);
-  clean();
-  setPixels(72,8,1);
-  clean();
-  setPixels(127,9,1);
-  clean();
-  
-  setPixels(127,10,1);
-  clean();
-  setPixels(1,11,1);
-  clean();
-  setPixels(1,12,1);
-  clean();
-  setPixels(1,13,1);
-  clean();
-  setPixels(1,14,1);
-  clean();
+    setPixels(127,0,0);
+    clean();
+    setPixels(8,1,0);
+    clean();
+    setPixels(8,2,0);
+    clean();
+    setPixels(8,3,0);
+    clean();
+    setPixels(127,4,0);
+    clean();
+    
+    setPixels(127,5,0);
+    clean();
+    setPixels(72,6,0);
+    clean();
+    setPixels(72,7,0);
+    clean();
+    setPixels(72,8,0);
+    clean();
+    setPixels(127,9,0);
+    clean();
+    
+    setPixels(127,10,0);
+    clean();
+    setPixels(1,11,0);
+    clean();
+    setPixels(1,12,0);
+    clean();
+    setPixels(1,13,0);
+    clean();
+    setPixels(1,14,0);
+    clean();
+    
+    setPixels(127,0,1);
+    clean();
+    setPixels(1,1,1);
+    clean();
+    setPixels(1,2,1);
+    clean();
+    setPixels(1,3,1);
+    clean();
+    setPixels(1,4,1);
+    clean();
+    
+    setPixels(127,5,1);
+    clean();
+    setPixels(72,6,1);
+    clean();
+    setPixels(72,7,1);
+    clean();
+    setPixels(72,8,1);
+    clean();
+    setPixels(127,9,1);
+    clean();
+    
+    setPixels(127,10,1);
+    clean();
+    setPixels(1,11,1);
+    clean();
+    setPixels(1,12,1);
+    clean();
+    setPixels(1,13,1);
+    clean();
+    setPixels(1,14,1);
+    clean();
 }
 
 int main(void)
