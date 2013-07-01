@@ -15,7 +15,7 @@ LD_FLAGS = -Os -Wl,--gc-sections -mmcu=$(MCU)
 AR_FLAGS = rcs
 
 PORT = /dev/ttyAMA0
-MCU = atmega644p
+MCU = atmega328p
 F_CPU = 16000000
 FORMAT = ihex
 UPLOAD_RATE = 38400 

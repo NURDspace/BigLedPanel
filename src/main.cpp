@@ -1,3 +1,7 @@
+#define F_CPU 16000000UL
+#define BAUD 9600
+#define SIZE 3
+
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -26,22 +30,45 @@ PORT_C
  16 (A2,PC2) - A2
 */
 
-#define F_CPU 16000000UL
-#define BAUD 9600
-#define SIZE 3
+/*
+ This functions toggles U7's E1
+*/
+void toggleE1() {
+    PORTB = 0b000001;
+    PORTB = 0b000011;
+}
 
+/*
+ This function toggles the chip clean pins (MR)
+*/
+void clean() {
+    for (int nopje = 0; nopje < 900; nopje++){
+        asm("nop");
+    }
+    PORTB = 0b000010;
+    PORTB = 0b000011;
+}
+
+/*
+ Setup function initializes all the registers
+*/
 void setup() {
     //Set registers
-    DDRB = DDRB | B111111;
-    DDRC = B000111;
-    DDRD = DDRD | B11111110;
+    DDRB = DDRB | 0b111111;
+    DDRC = 0b000111;
+    DDRD = DDRD | 0b11111110;
 
-    PORTB = B000011;
+    PORTB = 0b000011;
  
     clean();
     toggleE1();
 }
 
+/*
+ Function to rotate the bits (tnx to cha0z97)
+ input -> output
+ 001   -> 100
+*/
 unsigned char rotate(char input)
 {
     char output =0;
@@ -60,6 +87,9 @@ unsigned char rotate(char input)
     return output;
 }
 
+/*
+ Function to loop pixels
+*/
 void setPixels(int RowData, int ColData, int ledBlock){
     /*
         Colom thing
@@ -94,19 +124,10 @@ void setPixels(int RowData, int ColData, int ledBlock){
     PORTC = ledBlock;
     toggleE1();
 }
-void toggleE1() {
-    PORTB = B000001;
-    PORTB = B000011;
-}
-void clean() {
-    //Toggle MR (PB0)
-    for (int nopje = 0; nopje < 900; nopje++){
-        asm("nop");
-    }
-    PORTB = B000010;
-    PORTB = B000011;
-}
 
+/*
+ Main program loop
+*/
 void loop() {
     setPixels(127,0,0);
     clean();
@@ -175,6 +196,9 @@ void loop() {
     clean();
 }
 
+/*
+ Main function
+*/
 int main(void)
 {
 	setup();
