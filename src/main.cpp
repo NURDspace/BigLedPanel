@@ -7,14 +7,20 @@
 #include <avr/interrupt.h>
 #include <util/setbaud.h>
 
+/*
+ Init global vals
+*/
+unsigned char rxstate;
+
 unsigned char framebuffer[90]={
 127,8,8,8,127, 127,72,72,72,127, 127,1,1,1,0,
-127,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0
+127,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0,
 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 };
+
 
 /*
 Pin setup
@@ -40,11 +46,37 @@ PORT_C
 */
 
 /*
+ Set up serial port
+*/
+void setupSerial() {
+    UBRR0H = UBRRH_VALUE;
+    UBRR0L = UBRRL_VALUE;
+
+#if USE_2X
+    UCSR0A |= _BV(U2X0);
+#else
+    UCSR0A &= ~(_BV(U2X0));
+#endif
+
+    UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data */ 
+    UCSR0B |= (1<<RXEN0) | (1<<RXCIE0) /* Enable RX and RX interrupt */
+    sei();
+}
+
+/*
  This functions toggles U7's E1
 */
 void toggleE1() {
     PORTB = 0b000001;
     PORTB = 0b000011;
+}
+
+/*
+ This is the RX interrupt function
+*/
+ISR(USART0_RX_vect) 
+{ 
+    //Hier moet nog wat komen
 }
 
 /*
@@ -62,6 +94,9 @@ void clean() {
  Setup function initializes all the registers
 */
 void setup() {
+    //Set up serial
+    setupSerial();
+
     //Set registers
     DDRB = DDRB | 0b111111;
     DDRC = 0b000111;
