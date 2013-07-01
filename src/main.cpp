@@ -101,14 +101,16 @@ void setPixels(int RowData, int ColData, int ledBlock){
         
         //Clock Col data 
         if (col < 8) {
-            //Clock data
+            //Clock data +8 is to set the D PIN to HIGH
             PORTD = rotate(col)+8 << 4;
-            //Shift col 1-8
+
+            //Shift col 1-8 (IC U8 PIN E)
             PORTC = 6;
         }else{
-            //Clock data
+            //Clock data +8 is to set the D PIN to HIGH
             PORTD = rotate(col-8)+8 << 4;
-            //Shift col 9-15
+
+            //Shift col 9-15 (IC U9 PIN E)
             PORTC = 7;
         }
         toggleE1();
@@ -120,7 +122,7 @@ void setPixels(int RowData, int ColData, int ledBlock){
     //Write row data to data registers
     PORTD = (RowData << 1);
             
-    //chip select
+    //chip select 0-5 (IC U1-U6 PIN CP)
     PORTC = ledBlock;
     toggleE1();
 }
