@@ -7,6 +7,15 @@
 #include <avr/interrupt.h>
 #include <util/setbaud.h>
 
+unsigned char framebuffer[90]={
+127,8,8,8,127, 127,72,72,72,127, 127,1,1,1,0,
+127,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0
+0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
+0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
+0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
+0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
+};
+
 /*
 Pin setup
 PORT_D
@@ -90,111 +99,49 @@ unsigned char rotate(char input)
 /*
  Function to loop pixels
 */
-void setPixels(int RowData, int ColData, int ledBlock){
+void setPixels(){
     /*
-        Colom thing
+        Loop al the boards 
     */
-    for (int col = 0; col < 16; col++) {
-        if (ColData == col){
-            continue;
-        }
-        
-        //Clock Col data 
-        if (col < 8) {
-            //Clock data +8 is to set the D PIN to HIGH
-            PORTD = rotate(col)+8 << 4;
+    for (int board = 0; board < 6; board++) {
+        /*
+            Loop colom per board
+        */
+        for (int col = 0; col < 16; col++) {
+            //Clock Col data 
+            if (col < 8) {
+                //Clock data +8 is to set the D PIN to HIGH
+                PORTD = rotate(col)+8 << 4;
 
-            //Shift col 1-8 (IC U8 PIN E)
-            PORTC = 6;
-        }else{
-            //Clock data +8 is to set the D PIN to HIGH
-            PORTD = rotate(col-8)+8 << 4;
+                //Shift col 1-8 (IC U8 PIN E)
+                PORTC = 6;
+            }else{
+                //Clock data +8 is to set the D PIN to HIGH
+                PORTD = rotate(col-8)+8 << 4;
 
-            //Shift col 9-15 (IC U9 PIN E)
-            PORTC = 7;
-        }
-        toggleE1();
-    }
+                //Shift col 9-15 (IC U9 PIN E)
+                PORTC = 7;
+            }
+            toggleE1();
     
-    /*
-        Row stuff
-    */
-    //Write row data to data registers
-    PORTD = (RowData << 1);
-            
-    //chip select 0-5 (IC U1-U6 PIN CP)
-    PORTC = ledBlock;
-    toggleE1();
+            /*
+                Write row data
+            */
+            //Write row data to data registers
+            PORTD = (framebuffer[col * board] << 1);
+                    
+            //chip select 0-5 (IC U1-U6 PIN CP)
+            PORTC = board;
+            toggleE1();
+        }
+    }
 }
 
 /*
  Main program loop
 */
 void loop() {
-    setPixels(127,0,0);
-    clean();
-    setPixels(8,1,0);
-    clean();
-    setPixels(8,2,0);
-    clean();
-    setPixels(8,3,0);
-    clean();
-    setPixels(127,4,0);
-    clean();
-    
-    setPixels(127,5,0);
-    clean();
-    setPixels(72,6,0);
-    clean();
-    setPixels(72,7,0);
-    clean();
-    setPixels(72,8,0);
-    clean();
-    setPixels(127,9,0);
-    clean();
-    
-    setPixels(127,10,0);
-    clean();
-    setPixels(1,11,0);
-    clean();
-    setPixels(1,12,0);
-    clean();
-    setPixels(1,13,0);
-    clean();
-    setPixels(1,14,0);
-    clean();
-    
-    setPixels(127,0,1);
-    clean();
-    setPixels(1,1,1);
-    clean();
-    setPixels(1,2,1);
-    clean();
-    setPixels(1,3,1);
-    clean();
-    setPixels(1,4,1);
-    clean();
-    
-    setPixels(127,5,1);
-    clean();
-    setPixels(72,6,1);
-    clean();
-    setPixels(72,7,1);
-    clean();
-    setPixels(72,8,1);
-    clean();
-    setPixels(127,9,1);
-    clean();
-    
-    setPixels(127,10,1);
-    clean();
-    setPixels(1,11,1);
-    clean();
-    setPixels(1,12,1);
-    clean();
-    setPixels(1,13,1);
-    clean();
-    setPixels(1,14,1);
+    setPixels();
     clean();
 }
 
