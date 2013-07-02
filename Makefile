@@ -21,7 +21,7 @@ FORMAT = ihex
 UPLOAD_RATE = 38400 
 MAX_SIZE = 30720
 
-OUTPUT = irmimic
+OUTPUT = nurdpanel
 
 all: $(LIBRARIES) $(OUTPUT).hex
 
