@@ -16,14 +16,15 @@ int bufferpos = 0;
 unsigned char rxstate;
 
 unsigned char framebuffer[90]={
-font[46][0],font[46][1],font[46][2],font[46][3],font[46][4],
-font[85][0],font[85][1],font[85][2],font[85][3],font[85][4],
-font[82][0],font[82][1],font[82][2],font[82][3],font[82][4],
-font[68][0],font[68][1],font[68][2],font[68][3],font[68][4],
-font[51][0],font[51][1],font[51][2],font[51][3],font[51][4],
-font[80][0],font[80][1],font[80][2],font[80][3],font[80][4],
-font[65][0],font[65][1],font[65][2],font[65][3],font[65][4],
-font[69][0],font[69][1],font[69][2],font[69][3],font[69][4],
+font[78-32][0],font[78-32][1],font[78-32][2],font[78-32][3],font[78-32][4],
+font[69-32][0],font[69-32][1],font[69-32][2],font[69-32][3],font[69-32][4],
+font[82-32][0],font[82-32][1],font[82-32][2],font[82-32][3],font[82-32][4],
+font[68-32][0],font[68-32][1],font[68-32][2],font[68-32][3],font[68-32][4],
+font[115-32][0],font[115-32][1],font[115-32][2],font[115-32][3],font[115-32][4],
+font[112-32][0],font[112-32][1],font[112-32][2],font[112-32][3],font[112-32][4],
+font[97-32][0],font[97-32][1],font[97-32][2],font[97-32][3],font[97-32][4],
+font[99-32][0],font[99-32][1],font[99-32][2],font[99-32][3],font[99-32][4],
+font[101-32][0],font[101-32][1],font[101-32][2],font[101-32][3],font[101-32][4],
 };
 
 
