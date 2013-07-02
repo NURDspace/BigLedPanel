@@ -11,6 +11,8 @@
 /*
  Init global vals
 */
+int bufferpos = 0;
+
 unsigned char rxstate;
 
 unsigned char framebuffer[90]={
@@ -63,7 +65,7 @@ void setupSerial() {
 
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data */ 
     UCSR0B |= (1<<RXEN0) | (1<<RXCIE0); /* Enable RX and RX interrupt */
-    sei();
+    sei(); /* Enable interrups */
 }
 
 /*
@@ -78,8 +80,36 @@ void toggleE1() {
  This is the RX interrupt function
 */
 ISR(USART0_RX_vect) 
-{ 
-    //Hier moet nog wat komen
+{
+    unsigned char b;
+    b=UDR0;
+    //reset buffer
+    if (b==0x81) {
+        bufferpos=0;
+        rxstate=0;
+    }
+
+    //Start filling the buffer when rxstate = 3
+    if (rxstate==3){
+        framebuffer[bufferpos] = b;
+        if (bufferpos < 90) {
+            bufferpos++;
+        }else{
+            bufferpos=0;
+        }
+    }
+
+    switch(rxstate)
+    {
+        case 0:
+            //If the start bit is there start filling the framebuffer
+            if(b==0x80) {
+                rxstate=3;
+            }else{
+                rxstate=0;
+            }
+        break;
+    }
 }
 
 /*
