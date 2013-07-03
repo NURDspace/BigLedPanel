@@ -45,13 +45,13 @@ font[101-32][0],font[101-32][1],font[101-32][2],font[101-32][3],font[101-32][4],
 Pin setup
 PORT_D
  0 (PD0) - UART RX
- 1 (PD1) - D1
- 2 (PD2) - D0
- 3 (PD3) - D2
+ 1 (PD1) - D5
+ 2 (PD6) - D3 A0
+ 3 (PD5) - D4 A1
  4 (PD4) - D6 A2
- 5 (PD5) - D4 A1
- 6 (PD6) - D3 A0
- 7 (PD7) - D5 
+ 5 (PD3) - D2
+ 6 (PD2) - D0
+ 7 (PD1) - D1
 
 PORT_B
  8  (PB0) - MR
@@ -80,14 +80,6 @@ void setupSerial() {
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data */ 
     UCSR0B |= (1<<RXEN0) | (1<<RXCIE0); /* Enable RX and RX interrupt */
     sei(); /* Enable interrups */
-}
-
-/*
- This functions toggles U7's E1
-*/
-void toggleE1() {
-    PORTB = 0b000001;
-    PORTB = 0b000011;
 }
 
 /*
