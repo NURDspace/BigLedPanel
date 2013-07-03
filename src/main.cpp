@@ -1,5 +1,5 @@
 #define F_CPU 16000000UL
-#define BAUD 115200 
+#define BAUD 9600 
 
 #include <inttypes.h>
 #include <avr/io.h>
@@ -16,7 +16,7 @@ unsigned char rxstate;
 
 unsigned char framebuffer[90]={
 font[78-32][0],font[78-32][1],font[78-32][2],font[78-32][3],font[78-32][4],
-font[69-32][0],font[69-32][1],font[69-32][2],font[69-32][3],font[69-32][4],
+font[85-32][0],font[85-32][1],font[85-32][2],font[85-32][3],font[85-32][4],
 font[82-32][0],font[82-32][1],font[82-32][2],font[82-32][3],font[82-32][4],
 
 font[68-32][0],font[68-32][1],font[68-32][2],font[68-32][3],font[68-32][4],
@@ -85,7 +85,7 @@ void setupSerial() {
 /*
  This is the RX interrupt function
 */
-ISR(USART0_RX_vect) 
+ISR(USART_RX_vect) 
 {
     unsigned char b;
     b=UDR0;
@@ -130,8 +130,8 @@ void toggleE1() {
  This function toggles the chip clean pins (MR)
 */
 void clean() {
-    for (int nopje = 0; nopje < 500; nopje++){
-        asm("nop");
+    for (int nopje = 0; nopje < 70; nopje++){
+        asm("nop"); asm("nop"); asm("nop"); asm("nop");
     }
     PORTB = 0b000010;
     PORTB = 0b000011;
@@ -224,8 +224,8 @@ void setPixels(){
             }
             toggleE1();
             datablock++;
+            clean();
         }
-        clean();
     }
 }
 

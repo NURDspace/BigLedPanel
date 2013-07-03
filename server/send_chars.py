@@ -13,7 +13,7 @@ parser.add_option("-s", "--speed", default=115200,
 (options, args) = parser.parse_args()
 
 if (options.port is None):
-        sys.stderr.write("You must specify -p /dev/ttyS0 or --speed /dev/ttyS0\n")
+        sys.stderr.write("You must specify -p /dev/ttyS0 or --port /dev/ttyS0\n")
         sys.exit(1)
 
 ledboard = Ledboard(options.port,options.speed)
@@ -34,7 +34,7 @@ try:
         if r:
             c = sys.stdin.read(1)
             _buffer = _buffer[1:] + c
-            ledboard.drawstring(buffert,font)
+            ledboard.drawstring(_buffer,font())
             print(_buffer)
 finally:
     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
