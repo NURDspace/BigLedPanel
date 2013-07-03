@@ -15,9 +15,11 @@ if (options.port is None):
         sys.exit(1)
 
 ser = serial.Serial(options.port, options.speed, timeout=1)
-ser.write(0x81)
-ser.write(0x80)
+
 while 1:
-    char = sys.stdin.read(1)
-    ser.write(char)
+    ser.write(0x81)
+    ser.write(0x80)
+    for i in rage(0,89):
+        #char = sys.stdin.read(1)
+        ser.write(chr(0))
 ser.close()

@@ -14,11 +14,11 @@ CPP_FLAGS = -g -Os -w -fno-exceptions -ffunction-sections -fdata-sections -mmcu=
 LD_FLAGS = -Os -Wl,--gc-sections -mmcu=$(MCU)
 AR_FLAGS = rcs
 
-PORT = /dev/ttyAMA0
+PORT = /dev/tty.usbmodemfa131 
 MCU = atmega328p
 F_CPU = 16000000
 FORMAT = ihex
-UPLOAD_RATE = 38400 
+UPLOAD_RATE = 115200 
 MAX_SIZE = 30720
 
 OUTPUT = nurdpanel
