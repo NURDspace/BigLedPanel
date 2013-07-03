@@ -1,12 +1,12 @@
 import serial
 
 class Ledboard:
-    def __init__(port,speed):
+    def __init__(self,port,speed):
         self.ser = serial.Serial(port, speed, timeout=1)
         self.framebuffer = [0x00] * 90
 
     def writebuffer(self, data):
-        if len(data) = 90:
+        if len(data) == 90:
             self.framebuffer = data
             self.draw()
 
@@ -15,18 +15,17 @@ class Ledboard:
         y = 0
         self.framebuffer = [0x00] * 90
         for char in string:
-            #resolve_font
             self.framebuffer[i] = font[y]
-            i++
-            y++
-            if y = 4:
+            i += 1 
+            y += 1 
+            if y == 4:
                 y = 0
         draw(data) 
  
     def draw(self):
         self.ser.write(0x81)
         self.ser.write(0x80)
-        for frame in self.framebuffer
+        for frame in self.framebuffer:
             self.ser.write(frame)
 
     def demo(self):
