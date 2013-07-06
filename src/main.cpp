@@ -179,53 +179,50 @@ void setup() {
  Function to loop pixels
 */
 void setPixels(){
-    int datablock = 0;
     /*
-        Loop al the boards 
+        Loop all 15 col's * 6
     */
-    for (int board = 0; board < 6; board++) {
+    for (int col = 0; col < 15; col++) {
         /*
-            Loop colom per board
+            Write row data for all the boards
         */
-        for (int col = 0; col < 15; col++) {
-            /*
-                Write row data
-            */
+        for (int board = 0; board < 6; board++){
+            int datablock = col + ( 15 * board);
+
             //Write row data to data registers
             PORTD = (framebuffer[datablock] << 1);
 
             //chip select 0-5 (IC U1-U6 PIN CP)
             PORTC = board;
             toggleE1();
-
-            //Clock Col data 
-            if (col < 8) {
-                //Clock data +8 is to set the D PIN to HIGH
-                PORTD = (col << 2) + 2;
-
-                //Shift col 1-8 (IC U8 PIN E)
-                PORTC = 6;
-
-                toggleE1();
-
-                //Clock data +8 is to set the D PIN to LOW 
-                PORTD = col << 2;
-            }else{
-                //Clock data +8 is to set the D PIN to HIGH
-                PORTD = ((col-8) << 2) + 2;
-
-                //Shift col 9-15 (IC U9 PIN E)
-                PORTC = 7;
-
-                toggleE1();
-                
-                //Clock data +8 is to set the D PIN to LOW 
-                PORTD = (col-8) << 2;
-            }
-            toggleE1();
-            datablock++;
-            clean();
         }
+
+        //Clock Col data 
+        if (col < 8) {
+            //Clock data +8 is to set the D PIN to HIGH
+            PORTD = (col << 2) + 2;
+
+            //Shift col 1-8 (IC U8 PIN E)
+            PORTC = 6;
+
+            toggleE1();
+
+            //Clock data +8 is to set the D PIN to LOW 
+            PORTD = col << 2;
+        }else{
+            //Clock data +8 is to set the D PIN to HIGH
+            PORTD = ((col-8) << 2) + 2;
+
+            //Shift col 9-15 (IC U9 PIN E)
+            PORTC = 7;
+
+            toggleE1();
+            
+            //Clock data +8 is to set the D PIN to LOW 
+            PORTD = (col-8) << 2;
+        }
+        toggleE1();
+        clean();
     }
 }
 

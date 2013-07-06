@@ -14,7 +14,7 @@ CPP_FLAGS = -g -Os -w -fno-exceptions -ffunction-sections -fdata-sections -mmcu=
 LD_FLAGS = -Os -Wl,--gc-sections -mmcu=$(MCU)
 AR_FLAGS = rcs
 
-PORT = /dev/tty.usbmodemfa131 
+PORT = /dev/ttyACM0 
 MCU = atmega328p
 F_CPU = 16000000
 FORMAT = ihex
