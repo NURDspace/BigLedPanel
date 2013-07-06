@@ -5,6 +5,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/setbaud.h>
+#include <util/delay.h>
 #include "font.h"
 
 /*
@@ -132,7 +133,8 @@ void toggleE1() {
 void clean() {
     for (int nopje = 0; nopje < 70; nopje++){
         asm("nop"); asm("nop"); asm("nop"); asm("nop");
-    }
+    } 
+ 
     PORTB = 0b000010;
     PORTB = 0b000011;
 
