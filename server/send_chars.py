@@ -35,7 +35,6 @@ try:
             c = sys.stdin.read(1)
             _buffer = _buffer[1:] + c
             ledboard.drawstring(_buffer,font())
-            print(_buffer)
 finally:
     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
