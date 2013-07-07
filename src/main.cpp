@@ -1,5 +1,6 @@
-#define F_CPU 16000000UL
+#define F_CPU 16000000
 #define BAUD 9600 
+//#define USE_2X   1 
 
 #include <inttypes.h>
 #include <avr/io.h>
