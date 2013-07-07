@@ -93,6 +93,7 @@ ISR(USART_RX_vect)
     if (b==0x81) {
         bufferpos=0;
         rxstate=0;
+        return;
     }
 
     //Start filling the buffer when rxstate = 3
@@ -103,18 +104,18 @@ ISR(USART_RX_vect)
         }else{
             bufferpos=0;
         }
-    }
-
-    switch(rxstate)
-    {
-        case 0:
-            //If the start bit is there start filling the framebuffer
-            if(b==0x80) {
-                rxstate=3;
-            }else{
-                rxstate=0;
-            }
-        break;
+    } else {
+        switch(rxstate)
+        {
+            case 0:
+                //If the start bit is there start filling the framebuffer
+                if(b==0x80) {
+                    rxstate=3;
+                }else{
+                    rxstate=0;
+                }
+            break;
+        }
     }
 }
 
