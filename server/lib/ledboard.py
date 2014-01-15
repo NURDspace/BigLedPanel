@@ -32,6 +32,8 @@ class Ledboard:
         self.ser.write(chr(0x81))
         self.ser.write(chr(0x80))
         for frame in self.framebuffer:
+            while self.ser.outWaiting() > 0:
+                time.sleep(0.1)
             self.ser.write(chr(frame))
 
     def demo(self):
