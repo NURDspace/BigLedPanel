@@ -3,7 +3,7 @@ import time
 
 class Ledboard:
     def __init__(self,port,speed):
-        self.ser = serial.Serial(port, speed, timeout=1, writeTimeout=25, interCharTimeout=25)
+        self.ser = serial.Serial(port, speed, timeout=1)
         self.framebuffer = [0x00] * 90
         time.sleep(1)
 
