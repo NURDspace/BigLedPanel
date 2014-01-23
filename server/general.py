@@ -32,6 +32,9 @@ _buffer = " " * 18
 PASSWORD = False
 CON_ID = {'host':options.mpdhost, 'port':options.mpdport}
 
+last_b_usd = 0
+last_l_usd = 0
+
 def mpdConnect(client, con_id):
     """
     Simple wrapper to connect MPD.
@@ -50,8 +53,11 @@ else:
     sys.exit(1)
 
 while 1:
-    _buffer = client.currentsong()['file']
-    str_pad = (" " * (18-13)) + "Now playing: "
+    try:
+        _buffer = client.currentsong()['file']
+        str_pad = (" " * (18-13)) + "Now playing: "
+    except:
+        str_pad = (" " * (18-13)) + "Not playing  "
     my_long_string = _buffer 
     my_long_string = str_pad + my_long_string  
     for i in range (0, len(my_long_string)):  
@@ -61,19 +67,53 @@ while 1:
     _buffer = "The time is: "
     ledboard.drawstring(_buffer,font())
     time.sleep(1.5)
-    for i in range (0, 10):
+    for i in range (0, 20):
         current = time.strftime("%H.%M.%S")
         _buffer = "%s%s%s"%(" " * 5,current," " * 5)
         ledboard.drawstring(_buffer,font())
-        time.sleep(1)
+        time.sleep(.5)
 
-    #temp
-    j = urllib2.urlopen('http://space.nurdspace.nl/spaceapi/status.json')
-    j_obj = json.load(j)
-    _buffer="De temperatuur in de space is: %s" %(j_obj['sensors'][0]['temp']['space'])
-    my_long_string = _buffer
-    my_long_string = (" " * 18) + my_long_string
+    #Koers
+    _b_usd = urllib2.urlopen('https://btc-e.com/api/2/btc_usd/ticker')
+    _l_usd = urllib2.urlopen('https://btc-e.com/api/2/ltc_usd/ticker')
+    b_usd = json.load(_b_usd)
+    l_usd = json.load(_l_usd)
+
+    if last_b_usd < b_usd['ticker']['last']:
+        updwn_b_usd = chr(0x80) 
+    else:
+        updwn_b_usd = chr(0x81)
+
+    if last_l_usd < l_usd['ticker']['last']:
+        updwn_l_usd = chr(0x80)
+    else:
+        updwn_l_usd = chr(0x81)
+
+
+    last_b_usd = b_usd['ticker']['last']
+    last_l_usd = l_usd['ticker']['last']
+
+    _buffer="B/U %s %s | L/U %s %s" % (b_usd['ticker']['last'],updwn_b_usd
+        ,l_usd['ticker']['last'],updwn_l_usd) 
+    my_long_string = (" " * 18) + _buffer 
+
     for i in range (0, len(my_long_string)):
         _buffer = my_long_string[i:(i+18)]
         ledboard.drawstring(_buffer,font())
-        time.sleep(.1)
+        time.sleep(.2)
+ 
+    for i in range (0, len(my_long_string)):
+        _buffer = my_long_string[i:(i+18)]
+        ledboard.drawstring(_buffer,font())
+        time.sleep(.2)
+    
+    #temp
+    #j = urllib2.urlopen('http://space.nurdspace.nl/spaceapi/status.json')
+    #j_obj = json.load(j)
+    #_buffer="De temperatuur in de space is: %s" %(j_obj['sensors'][0]['temp']['space'])
+    #my_long_string = _buffer
+    #my_long_string = (" " * 18) + my_long_string
+    #for i in range (0, len(my_long_string)):
+    #    _buffer = my_long_string[i:(i+18)]
+    #    ledboard.drawstring(_buffer,font())
+    #    time.sleep(.1)
