@@ -5,6 +5,7 @@ import termios, fcntl, sys, os, select, string
 import time
 import urllib2
 import json
+import unicodedata
 from optparse import OptionParser
 from lib.ledboard import Ledboard
 from lib.font1 import font1 as font
@@ -37,6 +38,7 @@ ledboard = Ledboard(options.port,options.speed)
 
 def sendLine(line,speed=0.25,hold=0):
     buffer = " " * 18
+    line = unicodedata.normalize('NFKD',unicode(line)).encode('ascii','ignore')
     if len(line) <= len(buffer):
         buffer=string.center(line,len(buffer))
         ledboard.drawstring(buffer,font())
@@ -67,7 +69,7 @@ def showMPD():
             song=client.currentsong()['file']
         if song != '?':
             try:
-                song=client.currentsong()['artist']+': '+song
+                song=client.currentsong()['artist']+' - '+song
             except:
                 pass
         else:
