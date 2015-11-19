@@ -1,6 +1,6 @@
 #define F_CPU 16000000
 #define BAUD 9600 
-//#define USE_2X   1 
+#define USE_2X   1 
 
 #include <inttypes.h>
 #include <avr/io.h>
@@ -47,12 +47,12 @@ Pin setup
 PORT_D
  0 (PD0) - UART RX
  1 (PD1) - D5
- 2 (PD6) - D3 A0
- 3 (PD5) - D4 A1
+ 2 (PD2) - D3 A0
+ 3 (PD3) - D4 A1
  4 (PD4) - D6 A2
- 5 (PD3) - D2
- 6 (PD2) - D0
- 7 (PD1) - D1
+ 5 (PD5) - D2
+ 6 (PD6) - D0
+ 7 (PD7) - D1
 
 PORT_B
  8  (PB0) - MR
@@ -133,7 +133,7 @@ void toggleE1() {
 */
 void clean() {
     for (int nopje = 0; nopje < 70; nopje++){
-        asm("nop"); asm("nop"); asm("nop"); asm("nop");
+        asm("nop\n\t""nop""\n\t""nop\n\t""nop\n\t");
     } 
  
     PORTB = 0b000010;

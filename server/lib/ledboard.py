@@ -5,7 +5,7 @@ class Ledboard:
     def __init__(self,port,speed):
         self.ser = serial.Serial(port, speed, timeout=1)
         self.framebuffer = [0x00] * 90
-        time.sleep(5)
+        time.sleep(1)
 
     def writebuffer(self, data):
         if len(data) == 90:
@@ -32,7 +32,11 @@ class Ledboard:
         self.ser.write(chr(0x81))
         self.ser.write(chr(0x80))
         for frame in self.framebuffer:
+            while self.ser.outWaiting() > 0:
+                time.sleep(30)
             self.ser.write(chr(frame))
+        time.sleep(.20)
+        self.ser.flushOutput()
 
     def demo(self):
         for i in range(0,89):

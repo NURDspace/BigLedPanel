@@ -1,0 +1,2 @@
+#!/bin/bash
+while true; do /home/nanny/bigledpanel/server/general.py -p /dev/ttyACM0 -s 9600 --mpdhost slab ; sleep 1 ; done
